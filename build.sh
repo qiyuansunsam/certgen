@@ -6,9 +6,29 @@ echo "🚀 Building Certificate Generator for Render..."
 # Change to certificate-generator directory
 cd certificate-generator
 
-# Install Composer
-echo "📦 Installing Composer..."
+# Install PHP and all required extensions
+echo "📦 Installing PHP and all required libraries..."
+apt-get update && apt-get install -y \
+    php-cli \
+    php-zip \
+    php-mbstring \
+    php-dom \
+    php-sqlite3 \
+    php-curl \
+    php-gd \
+    php-json \
+    php-xml \
+    php-pdo \
+    php-pdo-sqlite \
+    curl \
+    unzip \
+    sqlite3 \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
+    libzip-dev
 curl -sS https://getcomposer.org/installer | php
+chmod +x composer.phar
 mv composer.phar /usr/local/bin/composer
 
 # Install Composer dependencies

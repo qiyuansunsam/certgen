@@ -6,6 +6,11 @@ echo "🚀 Building Certificate Generator for Render..."
 # Change to certificate-generator directory
 cd certificate-generator
 
+# Install Composer
+echo "📦 Installing Composer..."
+curl -sS https://getcomposer.org/installer | php
+mv composer.phar /usr/local/bin/composer
+
 # Install Composer dependencies
 echo "📚 Installing Composer dependencies..."
 composer install --no-dev --optimize-autoloader --no-interaction

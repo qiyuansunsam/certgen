@@ -6,34 +6,24 @@ echo "🚀 Building Certificate Generator for Render..."
 # Change to certificate-generator directory
 cd certificate-generator
 
-# Install PHP and all required extensions
-echo "📦 Installing PHP and all required libraries..."
-apt-get update && apt-get install -y \
-    php-cli \
-    php-zip \
-    php-mbstring \
-    php-dom \
-    php-sqlite3 \
-    php-curl \
-    php-gd \
-    php-json \
-    php-xml \
-    php-pdo \
-    php-pdo-sqlite \
-    curl \
-    unzip \
-    sqlite3 \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
-    libpng-dev \
-    libzip-dev
-curl -sS https://getcomposer.org/installer | php
-chmod +x composer.phar
-mv composer.phar /usr/local/bin/composer
+# Download and install Composer (using existing PHP from Render)
+echo "📦 Installing Composer..."
+EXPECTED_CHECKSUM="$(php -r 'copy("https://composer.github.io/installer.sig", "php://stdout");')"
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+ACTUAL_CHECKSUM="$(php -r "echo hash_file('sha384', 'composer-setup.php');")"
+
+if [ "$EXPECTED_CHECKSUM" != "$ACTUAL_CHECKSUM" ]; then
+    >&2 echo 'ERROR: Invalid installer checksum'
+    rm composer-setup.php
+    exit 1
+fi
+
+php composer-setup.php --quiet
+rm composer-setup.php
 
 # Install Composer dependencies
 echo "📚 Installing Composer dependencies..."
-composer install --no-dev --optimize-autoloader --no-interaction
+php composer.phar install --no-dev --optimize-autoloader --no-interaction
 
 # Create necessary directories
 echo "📁 Creating directories..."

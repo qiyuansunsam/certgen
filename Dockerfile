@@ -1,44 +1,42 @@
+# Use official PHP image with Apache
 FROM php:8.1-apache
 
-# Install system dependencies
+# Install required system packages and PHP extensions
 RUN apt-get update && apt-get install -y \
     git \
-    curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
     zip \
-    unzip
+    unzip \
+    && docker-php-ext-install pdo pdo_mysql \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
-
-# Get latest Composer
+# Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy application files
-COPY certificate-generator/ /var/www/html/
+# Copy your application
+COPY . /var/www/html/
 
-# Install dependencies
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+# Run your build script
+RUN bash build.sh
 
-# Run initialization
-RUN php init.php
+# Configure Apache to serve from the right directory
+RUN echo '<VirtualHost *:80>\n\
+    DocumentRoot /var/www/html/certificate-generator/public\n\
+    <Directory /var/www/html/certificate-generator/public>\n\
+        AllowOverride All\n\
+        Require all granted\n\
+    </Directory>\n\
+</VirtualHost>' > /etc/apache2/sites-available/000-default.conf
 
-# Set permissions
-RUN chown -R www-data:www-data /var/www/html
-
-# Enable Apache mod_rewrite
+# Enable Apache modules
 RUN a2enmod rewrite
 
-# Expose port 80
-EXPOSE 80
+# Use the PORT environment variable that Render provides
+RUN sed -i 's/80/${PORT}/g' /etc/apache2/sites-available/000-default.conf
+RUN sed -i 's/80/${PORT}/g' /etc/apache2/ports.conf
 
-# Start Apache
-CMD ["apache2-foreground"]
+# Start command
+CMD ["bash", "start.sh"]

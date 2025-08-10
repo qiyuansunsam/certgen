@@ -6,6 +6,4 @@ services:
     envVars:
       - key: APP_ENV
         value: production
-      - key: PHP_VERSION  
-        value: 8.1
     plan: starter

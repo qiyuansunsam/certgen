@@ -3,22 +3,8 @@ set -e
 
 echo "🚀 Building Certificate Generator for Render..."
 
-# Update system packages
-echo "📦 Updating system packages..."
-apt-get update
-
-# Install required PHP extensions and dependencies
-echo "🔧 Installing PHP extensions..."
-apt-get install -y \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
-    libpng-dev \
-    libzip-dev \
-    unzip \
-    sqlite3 \
-    php-sqlite3 \
-    php-mbstring \
-    php-dom
+# Change to certificate-generator directory
+cd certificate-generator
 
 # Install Composer dependencies
 echo "📚 Installing Composer dependencies..."

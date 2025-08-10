@@ -3,6 +3,9 @@ set -e
 
 echo "🌟 Starting Certificate Generator..."
 
+# Change to certificate-generator directory
+cd certificate-generator
+
 # Ensure database exists and has proper permissions
 if [ -f "database/certificates.db" ]; then
     echo "✅ Database found"

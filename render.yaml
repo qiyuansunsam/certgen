@@ -3,7 +3,7 @@ services:
     name: certificate-generator
     env: php
     runtime: php81
-    buildCommand: cd certificate-generator && bash build.sh
+    buildCommand: cd certificate-generator && composer install --no-dev --optimize-autoloader --no-interaction && php init.php
     startCommand: cd certificate-generator && bash start.sh
     envVars:
       - key: APP_ENV

@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: certificate-generator
+    env: php
+    runtime: php81
+    buildCommand: ./build.sh
+    startCommand: ./start.sh
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: PHP_VERSION  
+        value: 8.1
+    plan: starter

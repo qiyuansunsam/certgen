@@ -1,0 +1,8 @@
+{
+  "name": "certificate-generator",
+  "version": "1.0.0",
+  "description": "Certificate Generator Frontend Assets",
+  "scripts": {
+    "start": "php -S localhost:8000 -t public"
+  }
+}

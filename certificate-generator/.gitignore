@@ -1,0 +1,7 @@
+vendor/
+.env
+*.log
+.DS_Store
+database/*.db
+storage/certificates/*.pdf
+node_modules/
